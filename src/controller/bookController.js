@@ -25,8 +25,8 @@ const bookCreation = async function (req, res) {
     try {
         let details = req.body
         //nothing from body comes this execute
-        if (!isValidRequestBody(details))
-            return res.status(400).send({ status: false, message: "Please fill book details" })
+        // if (!isValidRequestBody(details))
+        //     return res.status(400).send({ status: false, message: "Please fill book details" })
 
         //details to be in body 
         let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = details

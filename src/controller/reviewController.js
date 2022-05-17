@@ -39,7 +39,7 @@ const bookReview = async function (req, res) {
         if (!isValidObjectId(paramBookId)) {
         return res.status(400).send({ status: false, message: "Please enter valid BookId" })
         }
-        let BookId = await bookModel.findById(paramBookId)
+        let BookId = await bookModel.findOne({_id:paramBookId, isDeleted:false})
         if (!BookId) {
         return res.status(404).send({ status: false, message: "Book not foundt" })
         }

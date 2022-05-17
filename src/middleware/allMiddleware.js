@@ -51,13 +51,21 @@ const authorization1 = async function(req,res,next){
     }
 }
 
-const authorization2 = async function(req,res,next){
+const authorization2 =  function(req,res,next){
     try{
         let createId = req.body.userId;
         let id = req.userId;
+        const isValidRequestBody = function (requestBody) {
+            return Object.keys(requestBody).length > 0
+        }
+        if (!isValidRequestBody(req.body)){
+        return res.status(400).send({ status: false, message: "Please fill book details" })
+        }
+
         if(!isValidObjectId(createId)){
             return res.status(400).send({ status: false, message: "Please enter valid userId" })
          }
+         
         if(id != createId){
             return res.status(403).send({status: false , message : "Not authorized..!" });
         }
