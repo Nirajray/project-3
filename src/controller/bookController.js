@@ -43,6 +43,7 @@ aws.config.update({
   
       s3.upload( uploadParams, function (err, data ){
           if(err) {
+              console.log(err)
               return reject({"error": err})
           }
           console.log(data)
@@ -67,54 +68,56 @@ const bookCreation = async function (req, res) {
         //details to be in body 
         let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = details
 
-        // //validation start 
-        // if (!isValid(title))
-        //     return res.status(400).send({ status: false, message: "TItle Name is Required" })
-        // //Check for uniquetitle in bookmodel
-        // let uniqueTitle = await bookModel.findOne({ title })
-        // if (uniqueTitle)
-        //     return res.status(400).send({ status: false, message: `${title} TItle name is already registered` })
-        // // nothing comes from body key of excerpt
-        // if (!isValid(excerpt))
-        //     return res.status(400).send({ status: false, message: "excerpt is required" })
-        // //checking userID from body 
-        // if (!isValid(userId))
-        //     return res.status(400).send({ status: false, message: "userId is Required" })
-        // if (!isValidObjectId(userId))
-        //     return res.status(400).send({ status: false, message: "Please enter valid userId" })
-        // //checking for UniqueUserId from userModel
-        // let userData = details.userId
-        // let UserId = await userModel.findById(userData)
-        // if (!UserId)
-        //     return res.status(400).send({ status: false, message: `${userId} this userid is not correct` })
-        // //Isbn is not present in the body 
-        // if (!ISBN) {
-        //     return res.status(400).send({ status: false, message: "ISBN is required" })
-        // }
-        // // valid ISBN===================
-        // if (!(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(ISBN))) {
-        //     return res.status(400).send({ status: false, message: "ISBN is not valid" })
-        // }
-        // //uniqueISBN checking from bookmodel
-        // let uniqueISBN = await bookModel.findOne({ ISBN })
-        // if (uniqueISBN)
-        //     return res.status(400).send({ status: false, message: `This ISBN ${ISBN} is already exist please provide new one` })
-        // //category is not present in the body
-        // if (!category)
-        //     return res.status(400).send({ status: false, message: 'category is needed' })
-        // // subcategory is not present in the body
-        // if (!subcategory)
-        //     return res.status(400).send({ status: false, message: 'subcategory is required' })
+        //validation start 
+        if (!isValid(title))
+            return res.status(400).send({ status: false, message: "TItle Name is Required" })
+        //Check for uniquetitle in bookmodel
+        let uniqueTitle = await bookModel.findOne({ title })
+        if (uniqueTitle)
+            return res.status(400).send({ status: false, message: `${title} TItle name is already registered` })
+        // nothing comes from body key of excerpt
+        if (!isValid(excerpt))
+            return res.status(400).send({ status: false, message: "excerpt is required" })
+        //checking userID from body 
+        if (!isValid(userId))
+            return res.status(400).send({ status: false, message: "userId is Required" })
+        if (!isValidObjectId(userId))
+            return res.status(400).send({ status: false, message: "Please enter valid userId" })
+        //checking for UniqueUserId from userModel
+        let userData = details.userId
+        let UserId = await userModel.findById(userData)
+        if (!UserId)
+            return res.status(400).send({ status: false, message: `${userId} this userid is not correct` })
+        //Isbn is not present in the body 
+        if (!ISBN) {
+            return res.status(400).send({ status: false, message: "ISBN is required" })
+        }
+        // valid ISBN===================
+        if (!(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/.test(ISBN))) {
+            return res.status(400).send({ status: false, message: "ISBN is not valid" })
+        }
+        //uniqueISBN checking from bookmodel
+        let uniqueISBN = await bookModel.findOne({ ISBN })
+        if (uniqueISBN)
+            return res.status(400).send({ status: false, message: `This ISBN ${ISBN} is already exist please provide new one` })
+        //category is not present in the body
+        if (!category)
+            return res.status(400).send({ status: false, message: 'category is needed' })
+        // subcategory is not present in the body
+        if (!subcategory)
+            return res.status(400).send({ status: false, message: 'subcategory is required' })
 
-        // if (!releasedAt)
-        //     return res.status(400).send({ status: false, message: 'releasedAt is required' })
+        if (!releasedAt)
+            return res.status(400).send({ status: false, message: 'releasedAt is required' })
 
-        // if (!(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(releasedAt))) {
-        //     return res.status(400).send({ status: false, message: "Data should be in yyyy-mm-dd format" })
-        // }
+        if (!(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(releasedAt))) {
+            return res.status(400).send({ status: false, message: "Data should be in yyyy-mm-dd format" })
+        }
         let files = req.files
         if (files && files.length > 0) {
+           
             var bookCoverUrl = await uploadFile(files[0]);
+        
         } else {
             res.status(400).send({ msg: "No file found" })
         }
